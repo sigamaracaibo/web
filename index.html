@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGA - Sistema de Gestión Academico</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts: Ejemplo con Merriweather -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <div id="root">
+        <div id="login-background-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+            <div class="shape shape-6"></div>
+            <div class="shape shape-7"></div>
+            <div class="shape shape-8"></div>
+        </div>
+
+        <div id="login-screen">
+            <div id="connection-status" title="Estado de la conexión con el servidor"></div>
+            <h1 class="login-title">SIGA</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Correo Electrónico</label>
+                    <input type="email" id="username-input" class="form-control" required value="admin@siga.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password-input" class="form-control" required value="admin123">
+                </div>
+                <div class="form-group form-group-inline">
+                    <input type="checkbox" id="remember-me-checkbox" checked>
+                    <label for="remember-me-checkbox">Mantener sesión iniciada</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                <p id="login-error"></p>
+            </form>
+            <div class="demo-users">
+                <p><strong>Usuarios de prueba:</strong></p>
+                <p>admin@siga.com (Contraseña: <strong>admin123</strong>)</p>
+            </div>
+        </div>
+    
+        <div id="splash-screen" class="hidden">
+            <div class="splash-content">
+                <img src="img/logo-institucional.png" alt="Logo Institucional" class="splash-logo">
+                <div class="loading-bar-container">
+                    <div class="loading-bar-fill"></div>
+                </div>
+                <p class="splash-text">Cargando Módulos...</p>
+            </div>
+        </div>
+
+        <div id="app">
+            <aside id="sidebar">
+                <div class="sidebar-header">
+                <div class="logo-container">
+                    <svg class="logo-border-svg">
+                        <defs>
+                            <linearGradient id="border-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0d6efd;" />
+                                <stop offset="100%" style="stop-color:#fd7e14;" />
+                            </linearGradient>
+                        </defs>
+                        <rect class="logo-border-rect" x="1" y="1" rx="10" />
+                    </svg>
+                    <img src="img/logo-institucional.png" alt="Logo Institucional" class="institutional-logo">
+                    <a href="#/dashboard" class="logo-link">
+                        <svg id="logo-svg" viewBox="0 0 200 70">
+                            <text id="logo-text" x="50%" y="55%" dominant-baseline="middle" text-anchor="middle">SIGA</text>
+                        </svg>
+                    </a>
+                </div>
+                </div>
+                <nav id="nav-menu" class="nav-menu">
+                    </nav>
+                <div class="sidebar-footer">
+                    <button id="logout-btn" class="nav-logout-btn">🚪 <span>Cerrar Sesión</span></button>
+                </div>
+            </aside>
+            
+            <div class="sidebar-overlay"></div>
+    
+            <div class="main-container">
+                <header id="topbar">
+                    <div class="topbar-left">
+                        <button id="hamburger-btn" class="hamburger-btn" type="button" title="Abrir menu" aria-label="Abrir menu">&#9776;</button>
+                        <h2 id="page-title">Tablero</h2>
+                    </div>
+                    <div class="topbar-right">
+                        <div class="theme-switch-wrapper">
+                            <label class="theme-switch" for="theme-checkbox" title="Cambiar tema">
+                                <input type="checkbox" id="theme-checkbox" />
+                                <div class="slider round"></div>
+                            </label>
+                        </div>
+                        <div class="user-info">
+                            <span id="username-display"></span>
+                            <span id="user-role-display"></span>
+                        </div>
+                        <div id="profile-picture-container" class="profile-picture-container" title="Cambiar foto de perfil"></div>
+                    </div>
+                </header>
+                
+                <main id="page-content">
+                    </main>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="app.js"></script>
+    <script type="module" src="script.js"></script>
+
+    <!-- =================================================================== -->
+    <!--                          PLANTILLAS DE MÓDULOS                      -->
+    <!-- =================================================================== -->
+    <template id="template-dashboard">
+        <div class="module-content" id="module-dashboard">
+            <div class="dashboard-widget-container">
+                <div id="time-weather-widget" class="card">
+                    <div class="widget-background"></div>
+                    <div class="widget-content">
+                        <div class="time-section">
+                            <div id="widget-clock" class="clock-large">--:--:--</div>
+                            <div id="widget-date" class="date-small">Cargando fecha...</div>
+                        </div>
+                        <div class="weather-section">
+                            <div id="widget-weather-icon" class="weather-icon">--</div>
+                            <div id="widget-temperature" class="temperature-large">--°</div>
+                            <div id="widget-location" class="location-small">Maracaibo, VE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h2>Panel de Control</h2>
+                    <p>Resumen de actividades y notificaciones del sistema.</p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-usuarios">
+        <div class="module-content" id="module-usuarios">
+            <div class="card">
+                <div class="card-header">
+                    <span>Gestión de Usuarios</span>
+                    <button id="add-user-btn" class="btn btn-primary btn-sm">➕ Nuevo Usuario</button>
+                </div>
+                <div class="card-body">
+                    <div class="table-wrapper">
+                        <table id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Correo Electrónico</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Las filas de usuarios se insertarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-disponibilidad">
+        <div class="module-content" id="module-disponibilidad">
+            <div class="card">
+                <div class="card-header">
+                    <span>Registrar mi Disponibilidad Horaria</span>
+                </div>
+                <div class="card-body">
+                    <form id="availability-form">
+                        <p>Seleccione los bloques horarios en los que está disponible para impartir clases.</p>
+                        <div class="form-row">
+                             <div class="form-group">
+                                <label for="avail-day">Día</label>
+                                <select id="avail-day" class="form-control" required>
+                                    <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="avail-start-time">Hora Inicio</label>
+                                <select id="avail-start-time" class="form-control" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="avail-end-time">Hora Fin</label>
+                                <select id="avail-end-time" class="form-control" required></select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="avail-carrera">Carrera</label>
+                                <select id="avail-carrera" class="form-control" required>
+                                    <option value="">Seleccione una carrera</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="semestre-group" style="display: none;">
+                                <label for="avail-semestre">Semestre</label>
+                                <select id="avail-semestre" class="form-control" required>
+                                </select>
+                            </div>
+                            <div class="form-group" id="materia-group" style="display: none;">
+                                <label for="avail-materia">Materia</label>
+                                <select id="avail-materia" class="form-control" required>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">➕ Añadir Disponibilidad</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span>Mi Horario de Disponibilidad</span>
+                </div>
+                <div id="availability-filter-container" class="card-body" style="display: none; border-bottom: 1px solid #dee2e6;">
+                    <div class="form-group">
+                        <label for="professor-filter-select"><strong>Filtrar por Profesor</strong></label>
+                        <select id="professor-filter-select" class="form-control">
+                            <!-- Opciones de profesores se cargarán aquí -->
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="availability-grid-container" class="schedule-grid-container">
+                        <!-- El horario se generará aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-plan-de-estudio">
+        <div class="module-content" id="module-plan-de-estudio">
+            <div class="card">
+                <div class="card-header">
+                    <span>Gestión de Carreras</span>
+                    <button id="add-career-btn" class="btn btn-primary btn-sm">➕ Nueva Carrera</button>
+                </div>
+                <div class="card-body">
+                    <div class="table-wrapper">
+                        <table id="careers-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de la Carrera</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Las filas de carreras se insertarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span>Gestión de Materias</span>
+                    <button id="add-subject-btn" class="btn btn-primary btn-sm">➕ Nueva Materia</button>
+                </div>
+                <div class="card-body">
+                    <div class="table-wrapper">
+                        <table id="subjects-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Principal</th>
+                                    <th>Alias</th>
+                                    <th>Horas (T/P/T)</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Las filas de materias se insertarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- =================================================================== -->
+    <!--                                MODALES                              -->
+    <!-- =================================================================== -->
+    <div id="career-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="career-modal-title" class="modal-title">Nueva Carrera</h3>
+                <button class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="career-form">
+                <input type="hidden" id="career-id">
+                <div class="form-group">
+                    <label for="career-name">Nombre de la Carrera</label>
+                    <input type="text" id="career-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="career-semesters">Número de Semestres</label>
+                    <input type="number" id="career-semesters" class="form-control" required min="1" max="12">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="subject-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="subject-modal-title" class="modal-title">Nueva Materia</h3>
+                <button class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="subject-form">
+                <input type="hidden" id="subject-id">
+                <div class="form-group">
+                    <label for="subject-name">Nombre Principal</label>
+                    <input type="text" id="subject-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject-semester">Semestre</label>
+                    <select id="subject-semester" class="form-control" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subject-hours-theoretical">Horas Teóricas</label>
+                        <input type="number" id="subject-hours-theoretical" class="form-control" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-hours-practical">Horas Prácticas</label>
+                        <input type="number" id="subject-hours-practical" class="form-control" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-hours-total">Horas Totales</label>
+                        <input type="number" id="subject-hours-total" class="form-control" required min="0">
+                    </div>
+                </div>
+                <div class="form-group form-group-inline">
+                    <input type="checkbox" id="has-aliases-checkbox">
+                    <label for="has-aliases-checkbox">Esta materia tiene nombres diferentes (alias) en otras carreras</label>
+                </div>
+                <div id="aliases-section" style="display: none;">
+                    <hr>
+                    <div class="form-group">
+                        <label><strong>Alias por Carrera</strong></label>
+                        <p><small>Asigne un nombre diferente a esta materia para carreras específicas.</small></p>
+                        <div id="subject-aliases-container">
+                            <!-- El contenido de los alias se generará aquí -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="curriculum-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="curriculum-modal-title" class="modal-title">Gestionar Malla Curricular</h3>
+                <button class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="curriculum-form">
+                <input type="hidden" id="curriculum-career-id">
+                <div id="curriculum-semesters-container"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="user-modal-title" class="modal-title">Nuevo Usuario</h3>
+                <button class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="user-form">
+                <input type="hidden" id="user-id">
+                <div class="form-group">
+                    <label for="user-name">Nombre Completo</label>
+                    <input type="text" id="user-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-email">Correo Electrónico</label>
+                    <input type="email" id="user-email" class="form-control" required>
+                </div>
+                <div class="form-group" id="user-password-group">
+                    <label for="user-password">Contraseña</label>
+                    <input type="password" id="user-password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-role">Rol</label>
+                    <select id="user-role" class="form-control" required>
+                        <option value="profesor">Profesor</option>
+                        <option value="director">Director</option>
+                        <option value="alumno">Alumno</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="availability-edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Modificar Disponibilidad</h3>
+                <button class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="availability-edit-form">
+                <input type="hidden" id="edit-avail-id">
+                <div class="form-group">
+                    <label>Materia</label>
+                    <p id="edit-avail-subject" style="font-weight: bold; font-size: 1.1rem;"></p>
+                </div>
+                <div class="form-group">
+                    <label for="edit-avail-day">Día</label>
+                    <select id="edit-avail-day" class="form-control" required>
+                        <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-avail-start-time">Nueva Hora de Inicio</label>
+                        <select id="edit-avail-start-time" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-avail-end-time">Nueva Hora de Fin</label>
+                        <select id="edit-avail-end-time" class="form-control" required></select>
+                    </div>
+                </div>
+                <div class="modal-footer" style="justify-content: space-between;">
+                    <button type="button" id="delete-avail-btn" class="btn btn-danger">Eliminar Disponibilidad</button>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Cambiar Foto de Perfil</h3>
+                <button class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="profile-form">
+                <div class="profile-modal-body-container">
+                    <div class="profile-photo-preview-container">
+                        <img id="profile-photo-preview" src="img/avatars/default.png" alt="Vista previa de la foto de perfil">
+                    </div>
+                    <div class="profile-tabs-container">
+                        
+                        <div id="tab-unsplash" class="tab-content active">
+                            <h4>Buscar imagen online en Unsplash</h4>
+                            <input type="search" id="unsplash-search-input" class="form-control" placeholder="Ej: oficina, tecnología, abstracto...">
+                            <div id="unsplash-gallery" class="profile-gallery"></div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="selected-photo-url">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <audio id="load-complete-sound" src="audio/load-complete.mp3" preload="auto"></audio>
+</body>
+</html>
